@@ -16,9 +16,18 @@ class Clothing {
     private String size;
     private String items;
     
-    
-    
+    public static double MIN_PRICE  = 10.0;
+    public static double TAX_RATE = .2;
 
+    public Clothing(String description, double price, String asize) {
+        this.description = description;
+        this.price = price;
+        this.size = asize;
+    }
+
+     
+
+       
     public String getItems() {
         return items;
     }
@@ -26,8 +35,7 @@ class Clothing {
     public void setItems(String items) {
         this.items = items;
     }
-    private final double MIN_PRICE  = 10.0;
-    private final double MIN_TAX = .2;
+    
     
 
     public String getDescription() {
@@ -39,7 +47,7 @@ class Clothing {
     }
 
     public double getPrice() {
-        return price + (price * MIN_TAX);
+        return price + (price * TAX_RATE);
     }
 
     public void setPrice(double price) {
@@ -60,5 +68,13 @@ class Clothing {
            return getDescription()+ "," + getSize()+ "," + getPrice();
     
     }
+    
+    public int compareto(Clothing c){
+           return this.description.compareTo(c.description);
+    
+    }
+
+    
+    
     
 }

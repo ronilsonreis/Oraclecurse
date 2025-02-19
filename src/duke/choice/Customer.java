@@ -15,6 +15,13 @@ class Customer {
     private String size;
     //double total;
     private Clothing[] items;
+
+    public Customer(String name,int measurement) {
+        this.name = name;
+        setSize(measurement);
+    }
+    
+    
    
 
     public void addItems(Clothing[] someitems) {
@@ -93,7 +100,7 @@ public String getName() {
                 break;
 
             default:
-                setSize("X");
+                setSize("XL");
                 break;
 
         }

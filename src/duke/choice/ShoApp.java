@@ -5,6 +5,14 @@
  */
 package duke.choice;
 
+import io.helidon.webserver.Routing;
+import io.helidon.webserver.ServerConfiguration;
+import io.helidon.webserver.WebServer;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author opc
@@ -20,71 +28,64 @@ public class ShoApp {
         double tax = 0.2, total = 0.0;
         System.out.println("Welcome to Duke choice Shop ");
 
-        Customer c1 = new Customer();
+        Customer c1 = new Customer("Roni", 3);
 
-        c1.setName("Roni");
-        c1.setSize("S");
-        
-       
+        //.setName("Roni");
+        //c1.setSize("S");
+        System.out.println("Min Price " + Clothing.MIN_PRICE);
 
-        Clothing item1 = new Clothing();
-        Clothing item2 = new Clothing();
-        Clothing[] items = {item1, item2, new Clothing(), new Clothing()};
+        Clothing item1 = new Clothing("Blue Jacket", 30.6, "L");
+        Clothing item2 = new Clothing("Pants", 20.9, "S");
+        Clothing[] items = {item1, item2, new Clothing("Skirt", 22.6, "M"), new Clothing("Tshirt", 30.9, "XL")};
 
-        item1.setDescription("Blue Jacket");
-        item1.setPrice((double) 30.6);
-        item1.setSize("S");
+        try {                   // demo 9
 
-        item2.setDescription("Grey Tshirt");
-        item2.setPrice((double) 20.9);
-        item2.setSize("S");
+            ItemList list = new ItemList(items); // demo 9
+            Routing routing = Routing.builder()
+                    .get("/items",list).build(); // demo 9
+            ServerConfiguration config = ServerConfiguration.builder() // demo 9
+                    .bindAddress(InetAddress.getLocalHost()) // demo 9
+                    .port(8888).build();// demo 9
+            WebServer ws = WebServer.create(config, routing);// demo 9
+            ws.start();// demo 9
+        } catch (UnknownHostException ex) {// demo 9
+            ex.printStackTrace();// demo 9
+        }
 
-        items[2].setDescription("Skirt");
-        items[2].setPrice((double) 22.6);
-        items[2].setSize("M");
-
-        items[3].setDescription("Gloves");
-        items[3].setPrice((double) 30.9);
-        items[3].setSize("X");
-        
-            
 //         System.out.println("Item 1 " + item1.description + item1.price + item1.size);
 //         System.out.println("Item 2 " + item2.description + item2.price + item2.size);
         // total = (item1.price + item2.price *2) * (1*tax);
-        int measurement = 3;
+        int measurement = 8;
 
         c1.addItems(items);
 
-        c1.setSize(measurement);
-
+        //c1.setSize(measurement);
         System.out.println("Custumer is " + c1.getName() + "," + c1.getSize() + "," + c1.getTotatlClothingCost());
         for (Clothing item : c1.getItems()) {
 
-            //System.out.println("Item :" + item.getDescription()+ "," + item.getSize()+ "," + item.getPrice());
-            System.out.println("Item output " + item);
+            System.out.println("Item :" + item.getDescription()); //+ "," + item.getSize()+ "," + item.getPrice());
 
         }
-        
+
         int average = 0;
-        int count =   0;
-        
-        for (Clothing item : c1.getItems()){
-             
-            if(item.getSize().equals("L")){
+        int count = 0;
+
+        for (Clothing item : c1.getItems()) {
+
+            if (item.getSize().equals("L")) {
                 count++;
-            average += item.getPrice();
+                average += item.getPrice();
             }
-            
-        } 
-        try{
-                average = average /count;
-        System.out.println("Average price " + average + ", Count" + count);
-        
-        }catch (ArithmeticException e){
+
+        }
+        try {
+            average = average / count;
+            System.out.println("Average price " + average + ", Count " + count);
+
+        } catch (ArithmeticException e) {
             System.out.println("Erro Divisor por zero");
         }
-        
-        
+
     }
 
 }
